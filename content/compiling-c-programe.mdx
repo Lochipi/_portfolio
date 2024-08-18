@@ -1,0 +1,81 @@
+---
+title: "The quickest and easiest way to run your C program with GCC"
+publishedAt: "2024-08-18"
+summary: "A simple guide to running C/C++ programs using GCC, with minimal setup and effort."
+---
+
+A lot of you might think it’ll take a lot of your time to run C/C++ programs while you’re just there for fun, and don't want to install all of the dependencies. If you’re using Linux for development, you might have already installed GCC. If not, you can run the following command to install it. And guess what? That's all you need to run your programs.
+
+## GCC
+
+GCC stands for “GNU Compiler Collection.” GCC is an integrated distribution of compilers for several major programming languages. These languages currently include C, C++, Objective-C, Objective-C++, Fortran, Ada, D, and Go.
+
+### Update Your Linux Packages
+
+Run the following command from the terminal to update the packages:
+
+```bash
+sudo apt update
+``` 
+
+You can then run the following command to install the GDB debugger and the GNU compiler tools:
+
+```bash
+sudo apt install build-essential gdb
+```
+
+You can then verify if you have GCC installed:
+
+```bash
+gcc –version
+```
+
+## Create a File
+
+Create a C file in your directory folder and name it whatever you like, then include some code in it. Here's a sample you can paste in:
+
+```C
+#include <stdio.h>
+
+int main() {
+    printf("Yaay!! It runs\n");
+    return 0;
+}
+```
+
+After you’ve done that, we can then compile the code to make it executable, which can then run by itself.
+
+Here is where we use the GCC compiler. Others might use Clang, but in our case, we use GCC:
+
+```bash
+gcc -o exec first.c
+```
+
+This will compile into a file called exec. You can name it whatever you want during the compilation command. If you check the files in your directory, you’ll find a new file there, named according to the output file name you provided.
+
+Then run the executable file:
+
+```bash
+./exec
+```
+
+![Compiled file results](/blogsImgs/c_compile.png)
+
+Finally, you can see the output of the code you wrote. Isn't this wonderful and simple? Yeah, that’s all you’ve got to do to run your C program.
+
+The GCC Params Explained
+There are different parameters you can include in your command to compile the code. Here are some you may include, though some are optional:
+
+> - **O**: The capital 'O' stands for optimization of the compiler. You can have levels 0 to 3, with 3 being the highest and 0 being none.
+> - **g**: Include this to make debugging easier.
+> - **Wall**: This enables all compiler warnings.
+> - **o**: The lowercase 'o' specifies the name of the output executable. If not specified, you’ll get the default name a.out (which stands for "assembly output").
+> - **'file name':** You can have multiple files here if you want.
+
+## Note:
+It’s worth knowing that compilers don’t always produce executables. They can produce object files, which are not directly executable but can later be bundled together with other object files to produce an executable.
+
+**Remember** that you can run the executable file with the ./ syntax. This allows you to compile and run your C program.
+
+## Wrap Up
+That’s all you need to know! See you in the next one. Adios.
