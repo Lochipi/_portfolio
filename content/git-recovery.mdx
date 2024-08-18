@@ -1,0 +1,136 @@
+---
+title: "Git Got Your Back: How to recover accidentally deleted files"
+publishedAt: "2024-06-18"
+summary: "The quickest and fasted way to recover files."
+---
+
+Hi there! Welcome to this wonderful guide, we will go step by step into learning about how to recover accidentally deleted files in git.
+
+## Intro
+
+To begin with, Git is an essential tool for every developer working with a team. Being proficient in Git not only feels empowering but also makes collaboration on the same project much easier.
+
+You might find yourself accidentally deleting a branch containing a file or even a folder with files you've been working on. While the chances of encountering this are minimal, it can happen. In this guide, I will demonstrate how to recover those files—both manually and using `cherry-pick`.
+
+**Prerequisites**: You should already be familiar with Git. If not, please check out my other [Intro to Git](https://medium.com/) on Medium for a basic understanding. Otherwise, let's dive in.
+
+## Terms - Commands
+
+We will start by defining some essential commands:
+
+### `git reflog`
+
+The `git reflog` command is used by Git to record updates made to the tips of branches. It allows you to return to commits, even those not referenced by any branch or tag. After rewriting history, the reflog includes information about the previous state of branches, making it possible to go back to that state if needed.
+
+You can follow it with a number (optional) to show a specific number of entries at the front or tail, e.g., `git reflog -5` and `git reflog --tail -3`. You can check out more about it [here](https://git-scm.com/docs/git-reflog).
+
+## The Danger Zone: Accidental Deletion
+
+Now, let's get hands-on. Create a repository, initialize it with `git init`, and add some files to it—let's use `readme.md` and `contributing.md`. Make a directory using `mkdir git-practice` and navigate into it using `cd <folder_name>`. Create the two files in this directory and add some text to them.
+
+Moving forward, let's add the files to the staging area and commit them using:
+
+```bash
+git add .
+git commit -m 'first commit'
+```
+
+As stated earlier, we might work with a team and want to contribute. Therefore, we need to create a branch where we can make our contributions. You can do this by running the following command from the main branch (in my case, it's named trunk):
+
+```bash
+git checkout -b contribute
+```
+
+This command creates a new branch named contribute and switches to it.
+
+Let's make some changes to the files. You can edit any of the files manually or use the following command to add some text to the contributing.md file:
+
+```bash
+echo 'this is my first message' >> contributing.md
+```
+
+When you check the status, you'll see that you've modified the file. Add and commit the changes.
+
+Now, let's simulate accidental deletion. Assume that we mistakenly delete the branch with the command:
+
+```bash
+git branch -D contribute
+```
+
+But first, switch back to your main branch (in my case, trunk).
+
+If you check the branches now, you'll find that only the main branch remains.
+
+## Now What?
+
+Your hard work on the contribute branch seems lost, but don't worry—we have two ways to recover it.
+
+a) Manual Recovery: The First Line of Defense
+We can use reflog to recover our lost data. Run the following command to view the last three commit entries:
+
+```bash
+git reflog -3
+```
+
+You'll see our history, including our last commit: "updated contributing file." Now that we have the SHA (1e3b6f3), we can rebuild the whole repository just from this tiny SHA.
+
+Run this command:
+
+```bash
+git cat-file -p 1e3b6f3
+```
+
+You'll see that even though we deleted the branch, the changes are still on your computer, and we can retrieve them from Git.
+
+b) Second Step - Go Into the Tree
+You can see that the reflog of our SHA contains a tree, parent, author, etc. To check the tree, run:
+
+```bash
+git cat-file -p 5de65aae286245ce2e8f2e011d717fcf52652b7f
+```
+
+You can see what we wrote/updated earlier. You can optionally cat it out into a different file and save it. That's it! You can do the same with files that you created differently and retrieve your changes.
+
+### Advanced Recovery: Using Git Cherry-Pick
+
+Remember we have our SHA (1e3b6f3) from earlier. If we need these changes on our trunk branch, we can merge them using:
+
+```bash
+git merge 1e3b6f3
+```
+
+Look at that—we have our changes from the contribute branch on our trunk branch! This is super easy, right?
+
+Hint: Your commit's SHA is a key piece of information.
+
+But it doesn't end here. If histories have diverged far enough, this could cause some problems as you wouldn't just be merging the one commit but all the commits in between 1e3b6f3 and trunk.
+
+To solve that, use cherry-pick. Given one or more existing commits, you can apply the change each one introduces, recording a new commit for each. This requires your working tree to be clean (no modifications from the HEAD commit).
+
+Learn more by running:
+
+```bash
+man git-cherry-pick
+```
+
+Cherry-pick allows you to take just one or more specific commits. If you didn't merge the above changes, you can cherry-pick them by running:
+
+```bash
+git cherry-pick 1e3b6f3
+```
+
+And that's it—you will merge right in. Fantastic!
+
+Last Word
+Accidentally deleting files in Git can be stressful, but Git offers ways to recover them. You can use git reflog to find lost commits and manually restore them, or you can use git cherry-pick to bring back specific changes with ease. Understanding these tools gives developers peace of mind, ensuring their work is always retrievable even in the face of mistakes.
+
+## References
+
+[Git Documentation: git reflog](https://git-scm.com/docs/git-reflog)
+[Git Documentation: git cherry-pick](https://git-scm.com/docs/git-cherry-pick)
+
+## Quick Reminder
+
+If you found this guide helpful, feel free to connect with me on [Twitter](https://x.com/EmaseLC) or on [LinkedIn](https://www.linkedin.com/in/cornelius-emase/). Your feedback and support mean the world to me. Leave a star ⭐ on my GitHub [here](https://github.com/Lochipi/SWE-Revision-Interview-Prep).
+
+Till next time, Turuuss!!
