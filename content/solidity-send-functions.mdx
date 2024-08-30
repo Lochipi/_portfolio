@@ -1,0 +1,161 @@
+---
+title: "Transfer, send and call methods in Solidity"
+publishedAt: "2024-08-29"
+summary: "Learn about Solidity methods used to send ether."
+---
+
+![cover image](/blogsImgs/solsend.png)
+
+There are different approaches to sending money(Ethers) in Ethereum using the solidity programming language, in this guide we will be talking about them and the best practices, which method is appropriate for given scenarios.
+
+## What is solidity?
+
+This is a programming language that is used to create smart contracts on the Ethereum blockchain. It is object oriented like any other languages such as Java, C and is high level.
+
+### Sending ether methods
+
+Keeping in mind that, solidity has **three** primary methods that allows us to send ether from one contract to another or maybe even to an **externally owned account**(EOA). These are:
+
+- **transfer**: The transfer method has a fixed amount of gas(that is 2300 gas) to be consumed, and allows you to send **ether**. In some instances when the recipient uses more than **2300 gas**, the `transfer` function fails and it reverts to its initial state.
+
+**Example/Syntax**:
+
+```javascript
+recipient.transfer(amount);
+```
+
+- **send**: This method also sends the 2300 gas and returns a boolean(`true` if successful, `false` if not). The failure is handled manually in this method, using the require or the if statement.
+
+**Example/Syntax**:
+
+```javascript
+bool success = recipient.send(amount);
+require(success, 'send failed')
+```
+
+- **call**: The most flexible and the preferred method (after solidity 0.5.0). It allows you to send ether with a customizable amount of gas(setting gas limits) and invoke a function.
+
+**Example/Syntax**:
+
+```javascript
+(bool success, ) = recipient.call{value: amount}("");
+require(success, 'Send failed!');
+```
+
+The empty argument triggers the fallback function of the receiving address.
+
+### When do you need to choose the `send`, `transfer`, `call` method?
+
+Well, when choosing between the `send`, `transfer`, and `call` methods for sending ether in solidity, you have to consider the requirements of your contracts functionality. Gather all your requirements, discuss them in detail, and choose the method that best suits your needs. Some factors to consider include:
+
+- **Security**
+  [] transfer and send are safer because they only forward 2300 gas, limiting the risk of re-entrancy attacks. However, call requires careful handling as it forwards all remaining gas, which can expose your contract to potential re-entrancy vulnerabilities.
+
+- **Gas usage**:
+  [] If your contract needs to send Ether and invoke functions that require more than 2300 gas, call is more appropriate. transfer and send may fail in such scenarios due to gas limitations.
+
+- **Error handling:**:
+  [] transfer automatically reverts on failure, making it simpler to use but less flexible.
+  [] send returns a boolean indicating success or failure, allowing you to handle errors manually.
+  [] call also returns a boolean and the returned data, providing the most flexibility but requiring more careful error handling.
+
+- **Compatibility and future-proofing:**:
+  [] call is generally preferred in newer Solidity versions due to its flexibility and ability to handle complex scenarios, while transfer and send are becoming less common.
+
+##### **transfer**
+
+The limitation of 2300 gas has made the transfer method less safer, as it may lead to unexpected behaviour when the receiving contract’s fallback function consumes more than 2300 gas.
+
+##### **call**
+
+You can specify the gas limit, and the rest can be forwarded back to you. This flexibility allows you to handle most of the complex scenarios. However you have to handle the reentrancy attack manually and return the value.
+
+## The issues with the call() method
+
+The **EVM** transfers all gas to the receiving contract in the case where it is not stated.And so the complex operations can occur at the expense of the caller.
+Another issue is the one with the re-entrancy attacks, meaning that a receiver contract can call a function again where the call() method is given.
+
+In summary, choose transfer for simple, straightforward transfers where security is a priority, send if you need basic error handling, and call for more complex transactions where you need greater control over gas and error management.
+
+**Example use cases**
+
+```javascript
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract SendEther {
+  function sendViaTransfer(address payable _to) public payable {
+  payable(_to).transfer(msg.value);
+ };
+
+function sendViaSend(address payable _to) public payable {
+   bool success = _to.send(msg.value);
+   require(success, 'send failed');
+};
+
+function sendViaCall(address _to) public payable {
+   (bool success, bytes memory data ) = _to.call{ value: msg.value }("");
+   require(success, "send failed!");
+ };
+}
+```
+
+## The payable concept
+
+The payable keyword in Solidity is a modifier that is used on functions and addresses to indicate that they can receive Ether. Here’s how the concept works:
+
+### 1. Payable Functions
+
+When you declare a function as payable, it means that the function can accept Ether as part of the transaction. Without the payable keyword, if you try to send Ether to the function, the transaction will fail.
+
+### 2. Payable Addresses
+
+When you mark an address as payable, it indicates that the address can receive Ether. A regular address (without payable) cannot receive Ether, and attempting to send Ether to a non-payable address will result in a compilation error.
+
+**Note that:**
+
+**Payable Functions**: Allow the function to accept Ether when it is called.
+**Payable Addresses**: Indicate that an address can receive Ether transfers.
+
+### The receive() and fallback() functions
+
+For a contract to receive Ether, it must have at least of the following functions, receive() and fallback().
+
+- receive() external payable
+- fallback() external payable
+
+The `receive()` function is called if `msg.data` is empty( a plain Ether without data), otherwise `fallback()` is called.
+
+```javascript
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract SendEther {
+
+  receive() external payable {};
+  fallback() external payable {};
+
+  function getBalance() public view returns(uint) {
+    return address(this).balance;
+  }
+}
+```
+
+## The re-entrance
+
+**What is it?**
+Well, this is an attack that occurs when an external contract is called before the first function call is completed, allowing the external contract to call back into the original contract, potentially draining funds or manipulating the state.
+
+### How do we resolve this?
+
+Yes, there are different ways to resolve this attack, some of them are:
+
+- **Use Checks-Effects-Interactions Pattern**: Update the contract state before making external calls.
+- **Implement ReentrancyGuard**: Use OpenZeppelin’s nonReentrant modifier to prevent reentrant calls.
+- **Avoid External Calls**: Minimize or eliminate external contract calls during critical operations.
+- **Use send or transfer**: Forward limited gas to prevent complex reentrant logic.
+- **Apply Boolean Locks (Mutexes)**: Use a boolean lock to prevent multiple entries into the same function.
+
+## Wrap up
+
+That’s a lot to take in, but yeah you’ve got a good grasp of what is best for you. Understanding these methods could save you a lot and be a great engineer. Till next time. Adios!
