@@ -75,7 +75,7 @@ export const DATA = {
       badges: [],
       location: "Remote",
       title: "Technical Writer",
-      logoUrl: "",
+      logoUrl: "/logos/kodaschool.png",
       start: "June 2024",
       end: "Present",
       description:
@@ -87,7 +87,7 @@ export const DATA = {
       badges: [],
       location: "Remote",
       title: "Writer",
-      logoUrl: "/4p.png",
+      logoUrl: "/logos/4p.png",
       start: "Nov 2023",
       end: "Present",
       description:
@@ -99,7 +99,7 @@ export const DATA = {
       badges: [],
       location: "Remote",
       title: "Software Engineer",
-      logoUrl: "",
+      logoUrl: "/logos/teksade.png",
       start: "Oct 2023",
       end: "April 2024",
       description:
@@ -124,7 +124,7 @@ export const DATA = {
       school: "Murang'a University of Technology",
       href: "https://www.mut.ac.ke/",
       degree: "Bachelor's Degree of Computer Science (BCS)",
-      logoUrl: "",
+      logoUrl: "/logos/mut.png",
       start: "2020",
       end: "2024",
     },
@@ -132,7 +132,7 @@ export const DATA = {
       school: "Scrimba",
       href: "https://v2.scrimba.com/home",
       degree: "Front End career Path",
-      logoUrl: "",
+      logoUrl: "/logos/scrimba.jpeg",
       start: "2023",
       end: "2023",
     },
@@ -268,6 +268,27 @@ export const DATA = {
           title: "Source",
           icon: <Icons.github className="h-4 w-4" />,
           href: "",
+        },
+      ],
+    },
+    {
+      title: "Blockchain Hackathon",
+      dates: "Sep 02, 2024 - Sep 4, 2024",
+      location: "Hybrid, Nigeria",
+      description:
+        "Developed a crypto based application to bridges the entry into web3 that allow users to sell, send and deposit money using local currency.",
+      image:
+        "/logos/zerokoin.png",
+      links: [
+        {
+          title: "Source",
+          icon: <Icons.github className="h-4 w-4" />,
+          href: "https://github.com/Lochipi/zerokoin",
+        },
+        {
+          title: "website",
+          icon: <Icons.globe className="h-4 w-4" />,
+          href: "https://zerokoin.vercel.app/",
         },
       ],
     },
