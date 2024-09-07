@@ -121,28 +121,36 @@ export const DATA = {
 
   education: [
     {
+      school: "Web3Bridge, Blockchain",
+      href: "https://www.web3bridgeafrica.com/",
+      degree: "Blockchain engineering",
+      logoUrl: "/logos/web3bridge.jpeg",
+      start: "August - 2024",
+      end: "November -2024",
+    },
+    {
       school: "Murang'a University of Technology",
       href: "https://www.mut.ac.ke/",
       degree: "Bachelor's Degree of Computer Science (BCS)",
       logoUrl: "/logos/mut.png",
-      start: "2020",
-      end: "2024",
+      start: "Sep, 2020",
+      end: "Aug, 2024",
     },
     {
       school: "Scrimba",
       href: "https://v2.scrimba.com/home",
       degree: "Front End career Path",
       logoUrl: "/logos/scrimba.jpeg",
-      start: "2023",
-      end: "2023",
+      start: "May, 2023",
+      end: "June, 2023",
     },
     {
       school: "Lodwar Boys National School",
       href: "",
       degree: "Kenya Certificate of Secondary Education",
       logoUrl: "",
-      start: "2016",
-      end: "2019",
+      start: "Jan, 2016",
+      end: "Nov, 2019",
     },
   ],
 
@@ -261,8 +269,7 @@ export const DATA = {
       location: "Remote, Google SSA",
       description:
         "Developed a machine learning model that predicts and learn from animals.",
-      image:
-        "",
+      image: "",
       links: [
         {
           title: "Source",
@@ -277,8 +284,7 @@ export const DATA = {
       location: "Hybrid, Nigeria",
       description:
         "Developed a crypto based application to bridges the entry into web3 that allow users to sell, send and deposit money using local currency.",
-      image:
-        "/logos/zerokoin.png",
+      image: "/logos/zerokoin.png",
       links: [
         {
           title: "Source",
