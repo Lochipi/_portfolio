@@ -27,8 +27,6 @@ I'm a passionate developer creating robust software applications and tools for t
 
 This portfolio is open-source and licensed under the **MIT License**. Feel free to check out the code, fork the repo, or even contribute to make it better!
 
-You can find the project [here](https://github.com/lochipi/portfolio). Contributions are welcome! 🚀
-
 ---
 
 ### Let's Connect!
@@ -37,7 +35,7 @@ You can find the project [here](https://github.com/lochipi/portfolio). Contribut
 - [Twitter](https://x.com/EmaseLC)
 - [Blog](https://emmett.vercel.app/blog)
 
-Feel free to reach out to me for collaborations, open-source projects, or if you just want to chat tech!
+Feel free to [reach out to me](corneliuslochipi@gmail.com) for collaborations, open-source projects, or if you just want to chat tech!
 
 ---
 
