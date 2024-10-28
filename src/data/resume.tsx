@@ -8,9 +8,9 @@ export const DATA = {
   location: "Nairobi, Kenya",
   locationLink: "https://www.google.com/maps/place/nairobi",
   description:
-    "I am a software engineer with 2 years of experience in the software industry. Very active on LinkedIn.",
+    "I am a software engineer with 2 years of experience in the software industry. Ping me on [Linkedin](https://www.linkedin.com/in/cornelius-emase/) for quick response.",
   summary:
-    "My focus area for the past few years has been front-end development with React and Next.Js, utilizing TypeScript. I am also skilled in back-end development with Node.js using tRPC and have experience using TypeScript in that context as well. In the past, [I pursued a degree in information technology](/#education), [interned at some open source communities and developed my skills](https://teksade.vercel.app/), and [competed in over 5 hackathons for fun](/#hackathons). I also had the pleasure of being a part of the in-person cohort of web3Bridge at [Nigeria](https://www.web3bridgeafrica.com/).",
+    "My focus area for the past few years has been front-end development with React and Next.Js, utilizing TypeScript. I am also skilled in back-end development with Node.js using tRPC and have experience using TypeScript in that context as well. In the past, [I pursued a degree in information technology](/#education), [interned at some open source communities and developed my skills](https://teksade.vercel.app/), and [competed in over 5 hackathons for fun](/#hackathons).",
   avatarUrl: "/mm.jpg",
   skills: [
     "React",
