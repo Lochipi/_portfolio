@@ -1,0 +1,130 @@
+---
+title: "Git: Working with Pagure"
+publishedAt: "2025-05-03"
+summary: "How to update your local and forked Pagure repo using Git in the terminal."
+---
+![Cover image, git & pagure](/blogsImgs/pagure/git_pagure.png)
+
+How to update your local repo and forked repo in the command line. The goal here is to update your local branch to match the upstream (parent) repo and push the update back to your fork on Pagure.
+
+You can learn more about setting up SSH keys on Pagure here: [*First steps on Pagure*](https://docs.pagure.org/pagure/usage/first_steps.html).
+
+## Steps to sync your local and forked repo (SSH)
+
+If you’ve configured your SSH secret keys in Pagure, you can follow these steps:
+
+### 1. Add the upstream repo via SSH
+
+This step connects your local repo to the original (upstream) Fedora repo, but now using the SSH URL.
+
+```bash
+git remote add upstream ssh://git@pagure.io/fedora-join/fedora-join-docs.git
+```
+
+You can then verify it’s added correctly using this command:
+
+```bash
+git remote -v
+```
+
+![termnial remote status](/blogsImgs/pagure/0001.png)
+
+This will show you both the **origin** (your fork) and **upstream** (the original repo) — yours may be different but that’s the gist.
+
+### 2. Fetch the latest state from upstream
+
+Now that your local repo knows about the upstream repo, fetch the latest changes (this won’t modify your local code yet ):
+
+```bash
+git fetch upstream
+```
+
+This code pulls all the latest changes from the upstream repo.
+
+> **Note:** `git fetch` and `git pull`  
+> `git fetch` only downloads the latest changes from the upstream repository. It does not modify your current working branch. You can review the changes first before deciding to merge.
+>
+> `git pull` is basically a shortcut for `git fetch` + `git merge`. It downloads the changes and immediately tries to merge them into your current branch. This can lead to merge conflicts if you’re not ready.
+>
+> **TL;DR:**  
+> Use `git fetch` when you want more control.  
+> Use `git pull` when you're ready to sync immediately.
+
+![git fetch command status on terminal](/blogsImgs/pagure/0002.png)
+
+This image above shows that my local repository has pulled in the latest changes from the upstream project, but my working branch hasn’t changed yet.  
+The new commit exists in `upstream/main`, and I can now compare or even merge it into my local branch when I’m ready.
+When you run:
+
+```bash
+git log upstream/main --oneline
+```
+
+You'll get something similar to the image, based on your project's history.
+
+![git log status on terminal](/blogsImgs/pagure/0003.png)
+
+The green-highlighted commit (`a8f67ca`) is my current `main` branch, which is also aligned with my fork’s `origin/main`.  
+The `docs/welcome-page` branch (my feature branch for the welcome page update) has already been merged and pushed, showing one commit ahead of `main` with commit `d704c2b`.
+
+However, the upstream repository (`upstream/main`) has progressed with a new commit (`9c69286`) that I don't yet have locally.  
+This tells me I’m one commit behind upstream, so my next step is to merge `upstream/main` into my local `main` and then push it to my fork to stay up to date.
+
+### 3. Checkout the branch you want to update
+
+Switch to the branch you want to sync the updates to (e.g., `main` or `master`):
+
+```bash
+git checkout main
+```
+This will switch to the branch and ensure that you’re on the branch you want to update.
+
+### 4. Are you ready to ‘Merge’? Merge upstream’s changes into your local branch
+
+This will merge the upstream branch(main, for example and if it’s master or something else just adjust) into your local branch:
+
+```bash
+git merge upstream/main
+```
+If there are conflicts, git will ask you to resolve them first.
+
+![git merge upstream status on terminal](/blogsImgs/pagure/0004.png)
+
+The screenshot above shows the output after I run the command ```git merge upstream/main``` . Since there were no conflicting changes between my local work and upstream, Git performed a fast-forward merge. This simply moved my local `main` branch pointer forward to match `upstream/main`, without creating a new merge commit.
+Key takeaways from the output:
+
+- The commit hash moved from `a8f67ca` to `9c69286`.
+
+`Updating a8f67ca..9c69286` is known as **fast forward merge** - and it’s exactly what it sounds like :)
+A fast-forward happens when the current branch (`main`, in my case) has no new commits of its own since it last shared history with the branch it's merging in (upstream/main). Because of this, Git doesn't need to create a merge commit. Instead, it just moves the pointer of the current branch forward to the latest commit of the other branch — as if we "fast-forwarded" to catch up.
+
+- Two files were updated:
+‘badges.adoc’ had one line removed.
+
+‘welcome.adoc’ had 116 lines modified in total (82 insertions, 35 deletions).
+
+### 5. Push the changes to your fork 
+
+![git status on terminal](/blogsImgs/pagure/0005.png)
+
+After we merge our changes from `upstream/main` and check the status now, you can see that our local `main` branch is ahead of `origin/main` by 2 commits. This simply means we’ve successfully pulled in updates from the official Fedora repo, but haven’t pushed them to our fork yet.
+
+![git push on terminal](/blogsImgs/pagure/0006.png)
+
+The command `git push` pushed all our synced updates from `upstream/main` into our personal fork(origin). Once this is done, you can check the status `git status` and it confirms that our local `main` is in sync with both `origin/main` and `upstream/main`.
+
+We’ve successfully pulled upstream changes, merged them locally, and pushed them to our fork. The working directory is now clean, no uncommitted changes hanging around.
+
+## Wrap up
+
+In open source projects, especially when contributing regularly, keeping your fork updated with the latest upstream changes is critical. It avoids conflicts, reduces confusion, and makes your future pull requests easier to manage.
+
+### Let’s recap the flow:
+
+1. **Add upstream remote** (only once).
+2. **Fetch** changes from upstream.
+3. **Compare and merge** with your local branch.
+4. **Push** updates to your fork on Pagure.
+5. **Start working** from a clean, current base.
+
+_Till next time!_ 🚀
